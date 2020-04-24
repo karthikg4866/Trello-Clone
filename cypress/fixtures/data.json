@@ -1,0 +1,29 @@
+{
+  	"id": "randomid",
+  	"title": "This is a board",
+  	"columns": [
+      {
+      	"id": 1,
+  			"title": "To do",
+  			"boardId": "randomid",
+  			"order": 0,
+  			"cards": [
+  				{ "id": 1, "title": "This is a card.", "order": 0, "columnId": 1 }
+  			]
+  		},
+      {
+      	"id": 2,
+      	"title": "Doing",
+  			"boardId": "randomid",
+  			"order": 1,
+  	    "cards": []
+  		},
+      {
+  			"id": 3,
+      	"title": "Done",
+  			"boardId": "randomid",
+  			"order": 2,
+      	"cards": []
+      }
+  ]
+  }
