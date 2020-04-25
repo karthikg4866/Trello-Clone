@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:record":"cypress run --record --key f7c1f504-9ca1-44d3-a779-f6c17c9d5ba2"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +58,7 @@
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
     "protractor": "^5.4.4",
+    "ts-loader": "^7.0.1",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
     "typescript": "~3.7.5"
