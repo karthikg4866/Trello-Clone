@@ -1,27 +1,46 @@
-import { createReducer, on, Action } from '@ngrx/store';
-import * as  boardActions from './board.actions';
+import { createReducer, on, Action, createFeatureSelector, createSelector } from '@ngrx/store';
+import * as boardActions from './board.actions';
+import { Board } from '../board/board';
 
-export interface State {
+
+export interface BoardState {
   title: string;
-  columns: number;
+  columns: any[];
   cards: number;
 }
-export const initialState: State = {
-  columns: 0,
+export const boardState: BoardState = {
+  columns: [],
   cards: 0,
   title: ''
 };
-const boardReducer = createReducer(
-  initialState,
-  on(boardActions.addColumn, state => ({ ...state, columns: state.columns + 1 })),
-  on(boardActions.deleteColumn, state => ({ ...state, columns: state.columns - 1 })),
-  on(boardActions.addCard, state => ({ ...state, cards: state.cards + 1 })),
-  on(boardActions.deleteCard, state => ({ ...state, cards: state.cards - 1 })),
-  on(boardActions.updateColumnCard, (state, { title, columns, cards}) => {
-    return ({ title, columns , cards });
-  })
-  );
 
-export function BoardReducer(state: State | undefined, action: Action) {
-  return boardReducer(state, action);
+
+export function BoardReducer(state = boardState, action: boardActions.boardColumnActions) {
+  switch (action.type) {
+    case boardActions.ColumnTypes.ADD_COLUMNS_SUCCESS: {
+      return { ...state, success: true };
+    }
+    case boardActions.ColumnTypes.GET_COLUMNS_SUCCESS: {
+      return { ...state, columns: action.payload };
+    }
+    case boardActions.ColumnTypes.UPDATE_COLUMNS_SUCCESS: {
+      return { ...state, success: true };
+    }
+    case boardActions.ColumnTypes.REMOVE_COLUMNS_SUCCESS: {
+      return { ...state, columns: action.payload };
+    }
+    case boardActions.CardTypes.ADD_CARD_SUCCESS: {
+      return { ...state, success: true };
+    }
+    case boardActions.CardTypes.REMOVE_CARD_SUCCESS: {
+      return { ...state, columns: action.payload };
+    }
+    default:
+      { return state; }
+  }
 }
+// export const getBoardState = createFeatureSelector<BoardState>("boardState");
+
+// export const getAllBoards = createSelector(getBoardState, (state: BoardState) => {
+//  console.log(state);
+// });

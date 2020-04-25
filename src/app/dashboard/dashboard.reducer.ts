@@ -2,23 +2,18 @@ import { createReducer, on, Action, createFeatureSelector, createSelector } from
 import * as dashboardActions from './dashboard.actions';
 import { Board } from '../board/board';
 
-export interface BoardState {
+export interface DashboardState {
   title: string;
   boards: number;
   listOfBoards: Board[];
 }
-export const boardState: BoardState = {
+export const dashboardState: DashboardState = {
   boards: 0,
   title: '',
   listOfBoards: []
 };
-// const dashboardReducer = createReducer(
-//   initialState,
-//   on(dashboardActions.addboard, state => ({ ...state, boards: state.boards + 1 })),
-//   on(dashboardActions.resetboard, state => ({boards: 0 , title: ''} ))
-// );
 
-export function DashboardReducer(state = boardState, action: dashboardActions.boardActions) {
+export function DashboardReducer(state = dashboardState, action: dashboardActions.boardActions) {
   switch (action.type) {
     case dashboardActions.BoardTypes.ADD_BOARD_SUCCESS: {
       return { ...state, success: true };
@@ -34,8 +29,3 @@ export function DashboardReducer(state = boardState, action: dashboardActions.bo
       { return state; }
   }
 }
-// export const getBoardState = createFeatureSelector<BoardState>("boardState");
-
-// export const getAllBoards = createSelector(getBoardState, (state: BoardState) => {
-//  console.log(state);
-// });
