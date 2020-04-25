@@ -15,7 +15,7 @@ var curYPos = 0,
   curDown = false;
 
 @Component({
-  selector: 'gtm-board',
+  selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })

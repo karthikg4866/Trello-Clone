@@ -10,10 +10,10 @@
 
 <section *ngIf="board" id="main" >
   <div *ngFor="let column of board.columns | orderBy : 'order'" class="sortable-column">
-    <gtm-column [column]="column"
+    <app-column [column]="column"
         (onAddCard)="addCard($event)"
         [cards]="board.cards">
-    </gtm-column>
+    </app-column>
   </div>
   <div class="add-column"
        (click)="enableAddColumn()" >

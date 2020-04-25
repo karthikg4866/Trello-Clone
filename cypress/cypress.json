@@ -8,5 +8,6 @@
   "videosFolder": "videos",
   "video": false,
   "projectId": "Trello",
-  "eyesTimeout": 180000
+  "eyesTimeout": 180000,
+  "chromeWebSecurity": false
 }

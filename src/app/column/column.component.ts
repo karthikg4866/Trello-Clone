@@ -8,7 +8,7 @@ import {CardService} from '../card/card.service';
 declare var jQuery: any;
 
 @Component({
-  selector: 'gtm-column',
+  selector: 'app-column',
   templateUrl: './column.component.html',
   styleUrls: ['./column.component.css'],
 })

@@ -4,7 +4,7 @@ import {CardService} from './card.service';
 import {WebSocketService} from '../ws.service';
 
 @Component({
-  selector: 'gtm-card',
+  selector: 'app-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.css'],
 })
