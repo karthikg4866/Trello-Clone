@@ -8,7 +8,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
-import { AddBoard, AddBoardSuccess, boardActions, BoardTypes, GetBoardSuccess } from '../dashboard/dashboard.actions';
+import { AddBoard, AddBoardSuccess, boardActions, BoardTypes, GetBoardSuccess, GetBoard } from '../dashboard/dashboard.actions';
 @Injectable()
 export class BoardService {
   apiUrl = '/board';
@@ -24,27 +24,31 @@ export class BoardService {
     mergeMap((action: any) =>
       this.http.post(this.apiUrl, action.payload).pipe(
         // If successful, dispatch success action with result
-        map(data =>{ return (new AddBoardSuccess(data))}),
+        map(data => {
+          this.store.dispatch(new GetBoard())
+          return new AddBoardSuccess(data)
+        }
+          // If request fails, dispatch failed action
+          // catchError(() => of({ type: 'FAILED' }))
+        )
+      )
+    ));
+
+  // Listen for the 'GET BOARD' action
+  @Effect()
+  getBoard$: Observable<Action> = this.actions$.pipe(
+    ofType(BoardTypes.GET_BOARD),
+    mergeMap((action: any) =>
+      this.http.get(this.apiUrl).pipe(
+        // If successful, dispatch success action with result
+        map((resp: any) => {
+          return (new GetBoardSuccess(resp.data))
+        }),
         // If request fails, dispatch failed action
         // catchError(() => of({ type: 'FAILED' }))
       )
     )
   );
-
-    // Listen for the 'GET BOARD' action
-    @Effect()
-    getBoard$: Observable<Action> = this.actions$.pipe(
-      ofType(BoardTypes.GET_BOARD),
-      mergeMap((action: any) =>
-        this.http.get(this.apiUrl).pipe(
-          // If successful, dispatch success action with result
-          map((resp: any) => { 
-            return (new GetBoardSuccess(resp.data))}),
-          // If request fails, dispatch failed action
-          // catchError(() => of({ type: 'FAILED' }))
-        )
-      )
-    );
 
   getAll() {
     return this.http.get(this.apiUrl).pipe(map((res: any) => res.data as Board[]));

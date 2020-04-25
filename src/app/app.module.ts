@@ -23,8 +23,7 @@ import { CardComponent } from './card/card.component';
 import { OrderBy } from './pipes/orderby.pipe';
 import { Where } from './pipes/where.pipe';
 import { StoreModule } from '@ngrx/store';
-import { DashboardReducer } from './dashboard/dashboard.reducer';
-import { BoardReducer } from './board/board.reducer';
+import { reducers } from './reducers';
 
 const appRoutes: Routes = [
   { path: 'b/:id', component: BoardComponent },
@@ -46,7 +45,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({ dashboard: DashboardReducer, board: BoardReducer }),
+    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([BoardService])
   ],
   providers: [HttpClientService, WebSocketService, ColumnService, CardService],
