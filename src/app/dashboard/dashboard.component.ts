@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {BoardService} from '../board/board.service';
-import {Board} from '../board/board'
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BoardService } from '../board/board.service';
+import { Board } from '../board/board';
+import { Store, select } from '@ngrx/store';
+import { AddBoard, GetBoard } from './dashboard.actions';
+import * as dashboardReducer from './dashboard.reducer';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,28 +13,34 @@ import {Board} from '../board/board'
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  boards: Board[];
-
-  constructor(private _bs: BoardService,
-      private _router: Router) { }
+ // boards$: Observable<any>;
+  listOfBoards: any[] = []
+  constructor(private bs: BoardService, private router: Router, private store: Store<any>) {
+   // this.store.select(state => state).subscribe(val => console.log(val));
+  }
 
   ngOnInit() {
-    this.boards = [];
-    this._bs.getAll().subscribe((boards:Board[]) => {
-      this.boards = boards;
+    this.store.dispatch(new GetBoard());
+    this.store.select('dashboard').subscribe(data => {
+      this.listOfBoards = data.listOfBoards;
     });
-    setTimeout(function() {
-      document.getElementById('content-wrapper').style.backgroundColor = "#fff";
+
+    // this.bs.getAll().subscribe((boards: Board[]) => {
+    //   this.boards = boards;
+    // });
+    setTimeout(() => {
+      document.getElementById('content-wrapper').style.backgroundColor = '#fff';
     }, 100);
   }
 
-  public addBoard(){
-   // console.log('Adding new board');
-    this._bs.post(<Board>{ title: "New board" })
-      .subscribe((board: Board) => {
-        this._router.navigate(['/b', board._id]);
-        //console.log('new board added');
-    });
+  public addBoard() {
+    console.log('Adding new board');
+    // this.bs.post({ title: 'New board' } as Board)
+    //   .subscribe((board: Board) => {
+    //     this.router.navigate(['/b', board._id]);
+    //     // console.log('new board added');
+    //   });
+    this.store.dispatch(new AddBoard({ title: 'New board' }));
   }
 
 }

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
 // PROVIDERS
 import { BoardService } from './board/board.service';
 import { CardService } from './card/card.service';
@@ -45,9 +46,10 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({ dashboard: DashboardReducer, board: BoardReducer })
+    StoreModule.forRoot({ dashboard: DashboardReducer, board: BoardReducer }),
+    EffectsModule.forRoot([BoardService])
   ],
-  providers: [HttpClientService, WebSocketService, BoardService, ColumnService, CardService],
+  providers: [HttpClientService, WebSocketService, ColumnService, CardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
