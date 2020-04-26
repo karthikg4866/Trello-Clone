@@ -1,13 +1,12 @@
 
-// [{"_id":"5ea30d31df042c32fc9055d1","title":"Board 1","__v":0},{"_id":"5ea3d46229795412082a02da","title":"New board 1","__v":0},{"_id":"5ea3d83629795412082a02de","title":"New board","__v":0}]
-
 describe('All APIs', function() {
   let board1;
   let column1;
   let column2;
+  let rootURL='http://localhost:3001';
 
   it('To Add new board', () => {
-    cy.request({url:'http://localhost:3001/board',method:'POST',
+    cy.request({url: rootURL+ '/board',method:'POST',
     body:{
       title: "New board by Cypress"
     }
@@ -20,7 +19,7 @@ describe('All APIs', function() {
   })
 
   it('To get all boards on init', () => {
-    cy.request({url:'http://localhost:3001/board',method:'GET',headers:{
+    cy.request({url:rootURL+'/board',method:'GET',headers:{
       'Content-Type':  'application/json',
        'Accept': 'application/json'
     }}).then((resp) => {
@@ -32,7 +31,7 @@ describe('All APIs', function() {
     });
   })
   it('To get board details', () => {
-    cy.request({url:'http://localhost:3001/board/'+board1['_id'],method:'GET'
+    cy.request({url:rootURL+'/board/'+board1['_id'],method:'GET'
     ,headers:{
       'Content-Type':  'application/json',
     'Accept': 'application/json'
@@ -42,7 +41,7 @@ describe('All APIs', function() {
   })
 
   it('To get all columns in board', () => {
-    cy.request({url:'http://localhost:3001/board/'+board1['_id']+'/columns',method:'GET'
+    cy.request({url:rootURL+'/board/'+board1['_id']+'/columns',method:'GET'
     ,headers:{
       'Content-Type':  'application/json',
     'Accept': 'application/json'
@@ -52,7 +51,7 @@ describe('All APIs', function() {
   })
 
   it('To get all cards in board', () => {
-    cy.request({url:'http://localhost:3001/board/'+board1['_id']+'/cards',method:'GET'
+    cy.request({url:rootURL+'/board/'+board1['_id']+'/cards',method:'GET'
     ,headers:{
       'Content-Type':  'application/json',
     'Accept': 'application/json'
@@ -62,7 +61,7 @@ describe('All APIs', function() {
   })
 
   it('To Add column in board' , () => {
-    cy.request({url:'http://localhost:3001/column',method:'POST',
+    cy.request({url:rootURL+'/column',method:'POST',
     body:{
       boardId: board1['_id'],
       order: 1000,
@@ -79,7 +78,7 @@ describe('All APIs', function() {
   })
 
   it('To Add card in board', () => {
-    cy.request({url:'http://localhost:3001/card',method:'POST',
+    cy.request({url:rootURL+'/card',method:'POST',
     body:{
       boardId: board1['_id'],
       columnId : column1['_id'],
@@ -95,7 +94,7 @@ describe('All APIs', function() {
   })
 
   it('To Added one more column in board', () => {
-    cy.request({url:'http://localhost:3001/column',method:'POST',
+    cy.request({url:rootURL+'/column',method:'POST',
     body:{
       boardId: board1['_id'],
       order: 3000,
@@ -112,7 +111,7 @@ describe('All APIs', function() {
   })
 
   it('To Add one more card in board', () => {
-    cy.request({url:'http://localhost:3001/card',method:'POST',
+    cy.request({url:rootURL+'/card',method:'POST',
     body:{
       boardId: board1['_id'],
       columnId : column2['_id'],
@@ -128,7 +127,7 @@ describe('All APIs', function() {
   })
 
   it('To update column in board' , () => {
-    cy.request({url:'http://localhost:3001/column/'+column1['_id'],method:'PUT',
+    cy.request({url:rootURL+'/column/'+column1['_id'],method:'PUT',
     body:{
       boardId: board1['_id'],
       order: 3000,
@@ -143,7 +142,7 @@ describe('All APIs', function() {
   })
 
   it('To update card in board', () => {
-    cy.request({url:'http://localhost:3001/card/'+column1['_id'],method:'PUT',
+    cy.request({url:rootURL+'/card/'+column1['_id'],method:'PUT',
     body:{
       boardId: board1['_id'],
       order: 3000,

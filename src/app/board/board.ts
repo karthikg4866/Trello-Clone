@@ -1,5 +1,5 @@
-import {Column} from '../column/column';
-import {Card} from '../card/card';
+import { Column } from '../column/column';
+import { Card } from '../card/card';
 
 export class Board {
 	_id: string;

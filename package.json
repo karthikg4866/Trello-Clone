@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "cypress:open": "cypress open",
-    "cypress:record":"cypress run --record --key f7c1f504-9ca1-44d3-a779-f6c17c9d5ba2"
+    "cypress:record": "cypress run --record --key f7c1f504-9ca1-44d3-a779-f6c17c9d5ba2"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~9.0.7",
     "@angular/platform-browser-dynamic": "~9.0.7",
     "@angular/router": "~9.0.7",
+    "@ngrx/core": "^1.2.0",
+    "@ngrx/effects": "^9.1.0",
     "@ngrx/store": "^9.1.0",
     "async": "^3.2.0",
     "body-parser": "^1.19.0",

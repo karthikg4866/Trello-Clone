@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
 // PROVIDERS
 import { BoardService } from './board/board.service';
 import { CardService } from './card/card.service';
@@ -22,8 +23,8 @@ import { CardComponent } from './card/card.component';
 import { OrderBy } from './pipes/orderby.pipe';
 import { Where } from './pipes/where.pipe';
 import { StoreModule } from '@ngrx/store';
-import { DashboardReducer } from './dashboard/dashboard.reducer';
-import { BoardReducer } from './board/board.reducer';
+import { reducers } from './reducers';
+import { BoardEffects } from './board/board.effects';
 
 const appRoutes: Routes = [
   { path: 'b/:id', component: BoardComponent },
@@ -45,9 +46,10 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    StoreModule.forRoot({ dashboard: DashboardReducer, board: BoardReducer })
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([BoardEffects])
   ],
-  providers: [HttpClientService, WebSocketService, BoardService, ColumnService, CardService],
+  providers: [HttpClientService, WebSocketService, ColumnService, CardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

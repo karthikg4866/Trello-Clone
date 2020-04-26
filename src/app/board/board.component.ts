@@ -8,6 +8,9 @@ import { WebSocketService } from '../ws.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import { AppState } from '../reducers';
+import { GetBoardbyId, GetCard, GetColumns } from './board.actions';
+import { boardState, BoardState } from './board.reducer';
 
 declare var jQuery: any;
 var curYPos = 0,
@@ -34,37 +37,44 @@ export class BoardComponent implements OnInit, OnDestroy {
     private _boardService: BoardService,
     private _columnService: ColumnService,
     private _router: Router,
-    private _route: ActivatedRoute) {
+    private _route: ActivatedRoute,
+    private store: Store<AppState>) {
 
   }
 
   ngOnInit() {
+    // get columns from store
     this._ws.connect();
     this._ws.onColumnAdd.subscribe(column => {
-     // console.log('adding column from server');
       this.board.columns.push(column);
       this.updateBoardWidth();
     });
 
+    // get card from store
     this._ws.onCardAdd.subscribe(card => {
-      //console.log('adding card from server');
       this.board.cards.push(card);
     });
-
+    this.currentTitle = (this.board && this.board.title) ? this.board.title: '';
     let boardId = this._route.snapshot.params['id'];
-
-    //let boardId = this._routeParams.get('id');
-    this._boardService.getBoardWithColumnsAndCards(boardId)
-      .subscribe(data => {
-     //   console.log(`joining board ${boardId}`);
-        this._ws.join(boardId);
-
-        this.board = data[0];
-        this.board.columns = data[1];
-        this.board.cards = data[2];
-        document.title = this.board.title + " | Generic Task Manager";
-        this.setupView();
-      });
+    this.store.dispatch(new GetBoardbyId(boardId));
+    this.store.dispatch(new GetColumns(boardId));
+    this.store.dispatch(new GetCard(boardId));
+    this.store.select("board").subscribe((boardStateData: BoardState) => {
+      this.board = {...boardStateData};
+      console.log("board component-------------------");
+      console.log(this.board);
+      this.currentTitle = this.board.title;
+      document.title = this.board.title + " | Generic Task Manager";
+      this.setupView();
+    });
+    // this._boardService.getBoardWithColumnsAndCards(boardId)
+    //   .subscribe(data => {
+    //     this.board = data[0];
+    //     this.board.columns = data[1];
+    //     this.board.cards = data[2];
+    //     document.title = this.board.title + " | Generic Task Manager";
+    //     this.setupView();
+    //   });
   }
 
   ngOnDestroy(){
@@ -146,17 +156,20 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   updateBoard() {
-    if (this.board.title && this.board.title.trim() !== '') {
-      this._boardService.put(this.board);
-    } else {
+    console.log("update board..........");
+    if (this.board.title && this.board.title.trim() !== '' && this.currentTitle.toLowerCase() !== this.board.title.toLowerCase()) {
       this.board.title = this.currentTitle;
+      this._boardService.put(this.board);
     }
+    // else {
+    //   this.board.title = this.currentTitle;
+    // }
     this.editingTilte = false;
     document.title = this.board.title + " | Generic Task Manager";
   }
 
   editTitle() {
-    this.currentTitle = this.board.title;
+    //  this.currentTitle = this.board.title;
     this.editingTilte = true;
 
     let input = this.el.nativeElement
