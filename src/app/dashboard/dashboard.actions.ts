@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-// export const addboard = createAction('[Counter Component] addboard');
-// export const resetboard = createAction('[Counter Component] resetboard');
+
 export enum BoardTypes {
     GET_BOARD = 'GET_BOARD',
     GET_BOARD_SUCCESS = 'GET_BOARD_SUCCESS',

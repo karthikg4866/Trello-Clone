@@ -4,11 +4,11 @@ import { Board } from '../board/board';
 
 export interface DashboardState {
   title: string;
-  board: any;
+  boards: number;
   listOfBoards: Board[];
 }
 export const dashboardState: DashboardState = {
-  board: null,
+  boards: 0,
   title: '',
   listOfBoards: []
 };
@@ -16,7 +16,7 @@ export const dashboardState: DashboardState = {
 export function DashboardReducer(state = dashboardState, action: dashboardActions.boardActions) {
   switch (action.type) {
     case dashboardActions.BoardTypes.ADD_BOARD_SUCCESS: {
-      return { ...state, success: true, board: action.payload };
+      return { ...state, success: true };
     }
 
     case dashboardActions.BoardTypes.GET_BOARD_SUCCESS: {

@@ -1,28 +1,22 @@
-import { Component, OnInit, OnDestroy,  ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { Board } from '../board/board';
 import { Column } from '../column/column';
-import { Card } from '../card/card';
 import { BoardService } from './board.service';
-import { ColumnService } from '../column/column.service';
-import { WebSocketService } from '../ws.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { GetBoardbyId, GetCard, GetColumns, AddColumn } from './board.actions';
-import { boardState, BoardState } from './board.reducer';
+import { GetBoardbyId, GetCard, GetColumns, AddColumn, UpdateColumn } from './board.actions';
+import { BoardState } from './board.reducer';
 
 declare var jQuery: any;
-var curYPos = 0,
-  curXPos = 0,
-  curDown = false;
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit, OnDestroy {
+export class BoardComponent implements OnInit {
   board: Board;
   addingColumn = false;
   addColumnText: string;
@@ -33,51 +27,24 @@ export class BoardComponent implements OnInit, OnDestroy {
   count$: Observable<number>;
 
   constructor(public el: ElementRef,
-    private _ws: WebSocketService,
     private _boardService: BoardService,
-    private _columnService: ColumnService,
-    private _router: Router,
     private _route: ActivatedRoute,
     private store: Store<AppState>) {
 
   }
 
   ngOnInit() {
-    // get columns from store
-    this._ws.connect();
-    this._ws.onColumnAdd.subscribe(column => {
-      this.board.columns.push(column);
-      this.updateBoardWidth();
-    });
-
-    // get card from store
-    this._ws.onCardAdd.subscribe(card => {
-      this.board.cards.push(card);
-    });
-    this.currentTitle = (this.board && this.board.title) ? this.board.title: '';
+    this.currentTitle = (this.board && this.board.title) ? this.board.title : '';
     let boardId = this._route.snapshot.params['id'];
     this.store.dispatch(new GetBoardbyId(boardId));
     this.store.dispatch(new GetColumns(boardId));
     this.store.dispatch(new GetCard(boardId));
-    this.store.select("board").subscribe((boardStateData: BoardState) => {
-      this.board = {...boardStateData};
+    this.store.select('board').subscribe((boardStateData: BoardState) => {
+      this.board = { ...boardStateData };
       this.currentTitle = this.board.title;
-      document.title = this.board.title + " | Generic Task Manager";
+      document.title = this.board.title + ' | Generic Task Manager';
       this.setupView();
     });
-    // this._boardService.getBoardWithColumnsAndCards(boardId)
-    //   .subscribe(data => {
-    //     this.board = data[0];
-    //     this.board.columns = data[1];
-    //     this.board.cards = data[2];
-    //     document.title = this.board.title + " | Generic Task Manager";
-    //     this.setupView();
-    //   });
-  }
-
-  ngOnDestroy() {
-    // console.log(`leaving board ${this.board._id}`);
-    this._ws.leave(this.board._id);
   }
 
   setupView() {
@@ -87,8 +54,8 @@ export class BoardComponent implements OnInit, OnDestroy {
       jQuery('#main').sortable({
         items: '.sortable-column',
         handler: '.header',
-        connectWith: "#main",
-        placeholder: "column-placeholder",
+        connectWith: '#main',
+        placeholder: 'column-placeholder',
         dropOnEmpty: true,
         tolerance: 'pointer',
         start: function (event, ui) {
@@ -103,58 +70,11 @@ export class BoardComponent implements OnInit, OnDestroy {
           });
         }
       }).disableSelection();
-
-      //component.bindPane();;
-
-      window.addEventListener('resize', function (e) {
-        component.updateBoardWidth();
-      });
-      component.updateBoardWidth();
-      document.getElementById('content-wrapper').style.backgroundColor = '';
-    }, 100);
+    });
   }
 
-  // bindPane() {
-  //   let el = document.getElementById('content-wrapper');
-  //   el.addEventListener('mousemove', function (e) {
-  //     e.preventDefault();
-  //     if (curDown === true) {
-  //       el.scrollLeft += (curXPos - e.pageX) * .25;// x > 0 ? x : 0;
-  //       el.scrollTop += (curYPos - e.pageY) * .25;// y > 0 ? y : 0;
-  //     }
-  //   });
-
-  //   el.addEventListener('mousedown', function (e) {
-  //     if (e.srcElement["id"] === 'main' || e.srcElement["id"] === 'content-wrapper') {
-  //       curDown = true;
-  //     }
-  //     curYPos = e.pageY; curXPos = e.pageX;
-  //   });
-  //   el.addEventListener('mouseup', function (e) {
-  //     curDown = false;
-  //   });
-  // }
-
-  updateBoardWidth() {
-    // this.boardWidth = ((this.board.columns.length + (this.columnsAdded > 0 ? 1 : 2)) * 280) + 10;
-    this.boardWidth = ((this.board.columns.length + 1) * 280) + 10;
-
-    if (this.boardWidth > document.body.scrollWidth) {
-      document.getElementById('main').style.width = this.boardWidth + 'px';
-    } else {
-      document.getElementById('main').style.width = '100%';
-    }
-
-    if (this.columnsAdded > 0) {
-      let wrapper = document.getElementById('content-wrapper');
-      wrapper.scrollLeft = wrapper.scrollWidth;
-    }
-
-    this.columnsAdded++;
-  }
 
   updateBoard() {
-    console.log("update board..........");
     if (this.board.title && this.board.title.trim() !== '' && this.currentTitle.toLowerCase() !== this.board.title.toLowerCase()) {
       this.board.title = this.currentTitle;
       this._boardService.put(this.board);
@@ -163,7 +83,7 @@ export class BoardComponent implements OnInit, OnDestroy {
     //   this.board.title = this.currentTitle;
     // }
     this.editingTilte = false;
-    document.title = this.board.title + " | Generic Task Manager";
+    document.title = this.board.title + ' | Generic Task Manager';
   }
 
   editTitle() {
@@ -176,18 +96,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     setTimeout(function () { input.focus(); }, 0);
   }
-
-  // updateColumnElements(column: Column) {
-  //   let columnArr = jQuery('#main .column');
-  //   let columnEl = jQuery('#main .column[columnid=' + column._id + ']');
-  //   let i = 0;
-  //   for (; i < columnArr.length - 1; i++) {
-  //     column.order < +columnArr[i].getAttibute('column-order');
-  //     break;
-  //   }
-
-  //   columnEl.remove().insertBefore(columnArr[i]);
-  // }
 
   updateColumnOrder(event) {
     let i: number = 0,
@@ -218,11 +126,9 @@ export class BoardComponent implements OnInit, OnDestroy {
       newOrder = elAfter / 2;
     }
 
-    let column = this.board.columns.filter(x => x._id === event.columnId)[0];
+    let column = JSON.parse(JSON.stringify(this.board)).columns.filter(x => x._id === event.columnId)[0];
     column.order = newOrder;
-    this._columnService.put(column).then(res => {
-      this._ws.updateColumn(this.board._id, column);
-    });
+    this.store.dispatch(new UpdateColumn(column));
   }
 
 
@@ -241,21 +147,13 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   addColumn() {
-
     let newColumn = <Column>{
       title: this.addColumnText,
       order: (this.board.columns.length + 1) * 1000,
       boardId: this.board._id
     };
     this.store.dispatch(new AddColumn(newColumn));
-    // this._columnService.post(newColumn)
-    //   .subscribe(column => {
-    //     this.board.columns.push(column)
-    //     console.log('column added');
-    //     this.updateBoardWidth();
-    //     this.addColumnText = '';
-    //     this._ws.addColumn(this.board._id, column);
-    //   });
+    this.addColumnText = '';
   }
 
   addColumnOnEnter(event: KeyboardEvent) {
@@ -282,20 +180,5 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.addingColumn = false;
     this.addColumnText = '';
   }
-
-
-  addCard(card: Card) {
-    this.board.cards.push(card);
-  }
-
-  // foreceUpdateCards() {
-  //   var cards = JSON.stringify(this.board.cards);
-  //   this.board.cards = JSON.parse(cards);
-  // }
-
-
-  // onCardUpdate(card: Card) {
-  //   this.foreceUpdateCards();
-  // }
 
 }

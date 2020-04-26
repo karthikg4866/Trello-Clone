@@ -10,7 +10,6 @@ import { BoardService } from './board/board.service';
 import { CardService } from './card/card.service';
 import { ColumnService } from './column/column.service';
 import { HttpClientService } from './httpclient';
-import { WebSocketService } from './ws.service';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
@@ -26,10 +25,12 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
 import { BoardEffects } from './board/board.effects';
 import { ColumnEffects } from './column/column.effect';
+import { CardEffects } from './card/card.effect';
 
 const appRoutes: Routes = [
   { path: 'b/:id', component: BoardComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard'  }
 ];
 
 @NgModule({
@@ -48,9 +49,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([BoardEffects, ColumnEffects])
+    EffectsModule.forRoot([BoardEffects, ColumnEffects, CardEffects])
   ],
-  providers: [HttpClientService, WebSocketService, ColumnService, CardService],
+  providers: [HttpClientService, ColumnService, CardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

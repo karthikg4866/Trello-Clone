@@ -4,41 +4,40 @@ import {Column} from '../column/column';
 import {Card} from '../card/card';
 import {map} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ColumnService {
   apiUrl = '/column';
 
-  constructor(private _http: HttpClientService) {
+  constructor(private http: HttpClientService) {
   }
 
   getAll() {
-    return this._http.get(this.apiUrl)
+    return this.http.get(this.apiUrl)
       .pipe(map(res => <Column[]>res["data"]));
   }
 
   get(id: string) {
-    return this._http.get(this.apiUrl + '/' + id)
+    return this.http.get(this.apiUrl + '/' + id)
       .pipe(map(res => <Column>res["data"]));
   }
 
   getCards(id: string) {
-    return this._http.get(this.apiUrl + '/' + id + '/cards')
+    return this.http.get(this.apiUrl + '/' + id + '/cards')
       .pipe(map(res => <Card[]>res["data"]));
   }
 
   put(column: Column) {
-    return this._http
-      .put(this.apiUrl + '/' + column._id, JSON.stringify(column))
-      .toPromise();
+    return this.http
+      .put(this.apiUrl + '/' + column._id, JSON.stringify(column));
   }
 
-  post(column: Column) {;
-    return this._http.post(this.apiUrl, JSON.stringify(column))
+  post(column: Column) {
+    return this.http.post(this.apiUrl, JSON.stringify(column))
       .pipe(map(res => <Column>res["data"]));
   }
 
   delete(column: Column) {
-    return this._http.delete(this.apiUrl + '/' + column._id)
+    return this.http.delete(this.apiUrl + '/' + column._id)
       .toPromise();
 
   }

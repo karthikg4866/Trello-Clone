@@ -29,8 +29,10 @@ export enum ColumnTypes {
 
 export enum CardTypes {
     ADD_CARD = 'ADD_CARD',
+    UPDATE_CARD = 'UPDATE_CARD',
     GET_CARD = 'GET_CARD',
     GET_CARD_SUCCESS = 'GET_CARD_SUCCESS',
+    UPDATE_CARD_SUCCESS = 'UPDATE_CARD_SUCCESS',
     REMOVE_CARD = 'REMOVE_CARD',
     ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS',
     REMOVE_CARD_SUCCESS = 'REMOVE_CARD_SUCCESS',
@@ -104,6 +106,15 @@ export class GetCardSucess implements Action {
     constructor(public payload: any) { }
 }
 
+export class UpdateCard implements Action {
+    readonly type = CardTypes.UPDATE_CARD;
+    constructor(public payload: any) { }
+}
+export class UpdateCardSuccess implements Action {
+    readonly type = CardTypes.UPDATE_CARD_SUCCESS;
+    constructor(public payload: any) { }
+}
+
 export class RemoveCard implements Action {
     readonly type = CardTypes.REMOVE_CARD;
     constructor(public payload: any) { }
@@ -114,7 +125,7 @@ export class RemoveCardSuccess implements Action {
     constructor(public payload: any) { }
 }
 
-export type boardColumnActions = GetCard | GetCardSucess | GetBoardbyId | GetBoardIdSuccess | GetColumns | GetColumnsSuccess | UpdateColumn | UpdateColumnSuccess | AddColumn | AddColumnSuccess | RemoveColumn | RemoveColumnSuccess | AddCard | RemoveCard | AddCardSuccess | RemoveCardSuccess;
+export type boardColumnActions = UpdateCard | UpdateCardSuccess | GetCard | GetCardSucess | GetBoardbyId | GetBoardIdSuccess | GetColumns | GetColumnsSuccess | UpdateColumn | UpdateColumnSuccess | AddColumn | AddColumnSuccess | RemoveColumn | RemoveColumnSuccess | AddCard | RemoveCard | AddCardSuccess | RemoveCardSuccess;
 
 
 
