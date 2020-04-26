@@ -74,6 +74,8 @@ export class BoardEffects {
             this.boardService.getColumns(action.payload).pipe(
                 // If successful, dispatch success action with result
                 map((resp: any) => {
+                    console.log("get columns after column add");
+                    console.log(resp);
                     return (new GetColumnsSuccess(resp))
                 })
                 // If request fails, dispatch failed action

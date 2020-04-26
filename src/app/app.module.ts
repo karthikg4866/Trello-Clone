@@ -25,6 +25,7 @@ import { Where } from './pipes/where.pipe';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
 import { BoardEffects } from './board/board.effects';
+import { ColumnEffects } from './column/column.effect';
 
 const appRoutes: Routes = [
   { path: 'b/:id', component: BoardComponent },
@@ -47,7 +48,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([BoardEffects])
+    EffectsModule.forRoot([BoardEffects, ColumnEffects])
   ],
   providers: [HttpClientService, WebSocketService, ColumnService, CardService],
   bootstrap: [AppComponent]

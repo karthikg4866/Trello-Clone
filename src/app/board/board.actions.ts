@@ -29,7 +29,7 @@ export enum ColumnTypes {
 
 export enum CardTypes {
     ADD_CARD = 'ADD_CARD',
-    GET_CARD = 'GAT_CARD',
+    GET_CARD = 'GET_CARD',
     GET_CARD_SUCCESS = 'GET_CARD_SUCCESS',
     REMOVE_CARD = 'REMOVE_CARD',
     ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS',

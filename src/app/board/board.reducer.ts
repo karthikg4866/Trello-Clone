@@ -25,7 +25,7 @@ export function BoardReducer(state = boardState, action: boardActions.boardColum
       return { ...state, _id: action.payload._id, title: action.payload.title };
     }
     case boardActions.ColumnTypes.ADD_COLUMNS_SUCCESS: {
-      return { ...state, success: true };
+      return { ...state, success: true};
     }
     case boardActions.ColumnTypes.GET_COLUMNS_SUCCESS: {
       return { ...state, columns: action.payload };
@@ -48,6 +48,16 @@ export function BoardReducer(state = boardState, action: boardActions.boardColum
     default:
       { return state; }
   }
+}
+
+function addColumn(column, state) {
+  let columnsList = state.columns;
+  console.log(columnsList);
+  if (columnsList) {
+    columnsList.push(column);
+  }
+  console.log(columnsList);
+  return columnsList;
 }
 // export const getBoardState = createFeatureSelector<BoardState>("boardState");
 
