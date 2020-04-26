@@ -15,7 +15,7 @@ import { AppState } from '../reducers';
 })
 export class DashboardComponent implements OnInit {
   // boards$: Observable<any>;
-  listOfBoards: any[] = []
+  listOfBoards: any[] = [];
   constructor(private bs: BoardService, private router: Router, private store: Store<AppState>) {
     // this.store.select(state => state).subscribe(val => console.log(val));
   }
@@ -24,7 +24,13 @@ export class DashboardComponent implements OnInit {
     this.store.dispatch(new GetBoard());
     this.store.select('dashboard').subscribe(data => {
       this.listOfBoards = data.listOfBoards;
+
+      if ( data.board) {
+        this.router.navigate(['/b', data.board._id]);
+      }
+
     });
+
 
     // this.bs.getAll().subscribe((boards: Board[]) => {
     //   this.boards = boards;

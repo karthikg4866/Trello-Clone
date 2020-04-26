@@ -22,7 +22,7 @@ export class BoardService {
       map((res: any) => res.data as Board));
   }
 
-  getBoardWithColumnsAndCards(id: string){
+  getBoardWithColumnsAndCards(id: string) {
     return forkJoin(this.get(id), this.getColumns(id), this.getCards(id));
   }
 

@@ -25,8 +25,8 @@ export class BoardEffects {
             this.boardService.post(action.payload).pipe(
                 // If successful, dispatch success action with result
                 map(data => {
-                    this.store.dispatch(new GetBoard())
-                    return new AddBoardSuccess(data)
+                    this.store.dispatch(new GetBoard());
+                    return new AddBoardSuccess(data);
                 }
                     // If request fails, dispatch failed action
                     // catchError(() => of({ type: 'FAILED' }))
@@ -57,9 +57,7 @@ export class BoardEffects {
             this.boardService.get(action.payload).pipe(
                 // If successful, dispatch success action with result
                 map((resp: any) => {
-                    console.log("get boatd by id");
-                    console.log(resp);
-                    return (new GetBoardIdSuccess(resp))
+                    return (new GetBoardIdSuccess(resp));
                 })
                 // If request fails, dispatch failed action
                 // catchError(() => of({ type: 'FAILED' }))
@@ -68,13 +66,13 @@ export class BoardEffects {
     );
 
     @Effect()
-    getCoumns$: Observable<Action> = this.actions$.pipe(
+    getColumns$: Observable<Action> = this.actions$.pipe(
         ofType(ColumnTypes.GET_COLUMNS),
         mergeMap((action: any) =>
             this.boardService.getColumns(action.payload).pipe(
                 // If successful, dispatch success action with result
                 map((resp: any) => {
-                    return (new GetColumnsSuccess(resp))
+                    return (new GetColumnsSuccess(resp));
                 })
                 // If request fails, dispatch failed action
                 // catchError(() => of({ type: 'FAILED' }))
@@ -89,7 +87,7 @@ export class BoardEffects {
             this.boardService.getAll().pipe(
                 // If successful, dispatch success action with result
                 map((resp: any) => {
-                    return (new GetCardSucess(resp))
+                    return (new GetCardSucess(resp));
                 })
                 // If request fails, dispatch failed action
                 // catchError(() => of({ type: 'FAILED' }))

@@ -13,7 +13,9 @@
     </div>
     <ul class="card-list" [attr.column-id]="column._id">
         <li *ngFor="let card of cards | where : { columnId: column._id } | orderBy : 'order'">
+<div class="col-md-4">
             <app-card [card]="card"></app-card>
+ </div>
         </li>
     </ul>
         <div class="add-card-div"

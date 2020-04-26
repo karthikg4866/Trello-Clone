@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { GetBoardbyId, GetCard, GetColumns } from './board.actions';
+import { GetBoardbyId, GetCard, GetColumns, AddColumn } from './board.actions';
 import { boardState, BoardState } from './board.reducer';
 
 declare var jQuery: any;
@@ -61,8 +61,6 @@ export class BoardComponent implements OnInit, OnDestroy {
     this.store.dispatch(new GetCard(boardId));
     this.store.select("board").subscribe((boardStateData: BoardState) => {
       this.board = {...boardStateData};
-      console.log("board component-------------------");
-      console.log(this.board);
       this.currentTitle = this.board.title;
       document.title = this.board.title + " | Generic Task Manager";
       this.setupView();
@@ -77,8 +75,8 @@ export class BoardComponent implements OnInit, OnDestroy {
     //   });
   }
 
-  ngOnDestroy(){
-   // console.log(`leaving board ${this.board._id}`);
+  ngOnDestroy() {
+    // console.log(`leaving board ${this.board._id}`);
     this._ws.leave(this.board._id);
   }
 
@@ -249,14 +247,15 @@ export class BoardComponent implements OnInit, OnDestroy {
       order: (this.board.columns.length + 1) * 1000,
       boardId: this.board._id
     };
-    this._columnService.post(newColumn)
-      .subscribe(column => {
-        this.board.columns.push(column)
-        console.log('column added');
-        this.updateBoardWidth();
-        this.addColumnText = '';
-        this._ws.addColumn(this.board._id, column);
-      });
+    this.store.dispatch(new AddColumn(newColumn));
+    // this._columnService.post(newColumn)
+    //   .subscribe(column => {
+    //     this.board.columns.push(column)
+    //     console.log('column added');
+    //     this.updateBoardWidth();
+    //     this.addColumnText = '';
+    //     this._ws.addColumn(this.board._id, column);
+    //   });
   }
 
   addColumnOnEnter(event: KeyboardEvent) {
