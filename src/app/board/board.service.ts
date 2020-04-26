@@ -4,51 +4,14 @@ import { HttpClientService } from '../httpclient';
 import { Board } from '../board/board';
 import { Column } from '../column/column';
 import { Card } from '../card/card';
-import { Action, Store } from '@ngrx/store';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
-import { AddBoard, AddBoardSuccess, boardActions, BoardTypes, GetBoardSuccess, GetBoard } from '../dashboard/dashboard.actions';
-@Injectable()
+import { map } from 'rxjs/operators';
+@Injectable({providedIn: 'root'})
 export class BoardService {
   apiUrl = '/board';
   boardsCache: Board[] = [];
 
-  constructor(private http: HttpClientService, private actions$: Actions, private store: Store) {
+  constructor(private http: HttpClientService) {
   }
-
-  // Listen for the 'ADD BOARD' action
-  @Effect()
-  addBoard$: Observable<Action> = this.actions$.pipe(
-    ofType(BoardTypes.ADD_BOARD),
-    mergeMap((action: any) =>
-      this.http.post(this.apiUrl, action.payload).pipe(
-        // If successful, dispatch success action with result
-        map(data => {
-          this.store.dispatch(new GetBoard())
-          return new AddBoardSuccess(data)
-        }
-          // If request fails, dispatch failed action
-          // catchError(() => of({ type: 'FAILED' }))
-        )
-      )
-    ));
-
-  // Listen for the 'GET BOARD' action
-  @Effect()
-  getBoard$: Observable<Action> = this.actions$.pipe(
-    ofType(BoardTypes.GET_BOARD),
-    mergeMap((action: any) =>
-      this.http.get(this.apiUrl).pipe(
-        // If successful, dispatch success action with result
-        map((resp: any) => {
-          return (new GetBoardSuccess(resp.data))
-        }),
-        // If request fails, dispatch failed action
-        // catchError(() => of({ type: 'FAILED' }))
-      )
-    )
-  );
 
   getAll() {
     return this.http.get(this.apiUrl).pipe(map((res: any) => res.data as Board[]));
@@ -80,11 +43,11 @@ export class BoardService {
       .then(res => console.log(res));
   }
 
-  // post(board: Board) {
-  //   const body = JSON.stringify(board);
-  //   return this.http.post(this.apiUrl, body).pipe(
-  //     map((res: any) => res.data as Board));
-  // }
+  post(board: Board) {
+    const body = JSON.stringify(board);
+    return this.http.post(this.apiUrl, body).pipe(
+      map((res: any) => res.data as Board));
+  }
 
   delete(board: Board) {
     this.http.delete(this.apiUrl + '/' + board._id)

@@ -17,8 +17,10 @@ export class GetBoard implements Action {
 
 export class GetBoardSuccess implements Action {
     readonly type = BoardTypes.GET_BOARD_SUCCESS;
-    constructor(public payload: any) { }
+    constructor(public payload: any) { 
+    }
 }
+
 export class AddBoard implements Action {
     readonly type = BoardTypes.ADD_BOARD;
     constructor(public payload: any) { }
@@ -39,6 +41,6 @@ export class RemoveBoardSuccess implements Action {
     constructor(public payload: any) { }
 }
 
-export type boardActions = GetBoard | GetBoardSuccess| AddBoard | RemoveBoard | AddBoardSuccess | RemoveBoardSuccess;
+export type boardActions = GetBoard | GetBoardSuccess | AddBoard | RemoveBoard | AddBoardSuccess | RemoveBoardSuccess;
 
 

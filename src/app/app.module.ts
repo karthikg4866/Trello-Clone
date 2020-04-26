@@ -24,6 +24,7 @@ import { OrderBy } from './pipes/orderby.pipe';
 import { Where } from './pipes/where.pipe';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
+import { BoardEffects } from './board/board.effects';
 
 const appRoutes: Routes = [
   { path: 'b/:id', component: BoardComponent },
@@ -46,7 +47,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([BoardService])
+    EffectsModule.forRoot([BoardEffects])
   ],
   providers: [HttpClientService, WebSocketService, ColumnService, CardService],
   bootstrap: [AppComponent]

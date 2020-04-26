@@ -1,28 +1,19 @@
 <div *ngIf="board" class="board-title">
-  <span [style.display]="editingTilte ? 'none' : ''" (click)="editTitle()">{{ board?.title }}</span>
+  <span *ngIf="!editingTilte" (click)="editTitle()">{{ board?.title }}</span>
 
-  <input
-    [style.display]="editingTilte ? '' : 'none' "
-    (keyup)="blurOnEnter($event)"
-    (blur)="updateBoard()"
-    [(ngModel)]="board.title" />
+  <input *ngIf="editingTilte" (keyup)="blurOnEnter($event)" (blur)="updateBoard()" [(ngModel)]="currentTitle" />
 </div>
 
-<section *ngIf="board" id="main" >
-  <div *ngFor="let column of board.columns | orderBy : 'order'" class="sortable-column">
-    <gtm-column [column]="column"
-        (onAddCard)="addCard($event)"
-        [cards]="board.cards">
+<section *ngIf="board" id="main">
+  <!-- TODO to MANI: getting issue with order pipe..plese check -->
+  <div *ngFor="let column of board.columns" class="sortable-column">
+    <gtm-column [column]="column" (onAddCard)="addCard($event)" [cards]="board.cards">
     </gtm-column>
   </div>
-  <div class="add-column"
-       (click)="enableAddColumn()" >
-  	<span [style.display]="addingColumn ? 'none' : ''" >Add a list...</span>
+  <div class="add-column" (click)="enableAddColumn()">
+    <span [style.display]="addingColumn ? 'none' : ''">Add a list...</span>
 
-    <input
-	    [style.display]="addingColumn ? '' : 'none' "
-	    (keyup)="addColumnOnEnter($event)"
-	    (blur)="addColumnOnBlur()"
-	    [(ngModel)]="addColumnText" />
+    <input [style.display]="addingColumn ? '' : 'none' " (keyup)="addColumnOnEnter($event)" (blur)="addColumnOnBlur()"
+      [(ngModel)]="addColumnText" />
   </div>
 </section>
