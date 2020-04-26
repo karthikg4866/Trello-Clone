@@ -248,6 +248,7 @@ console.log("column addede")
       boardId: this.board._id
     };
     this.store.dispatch(new AddColumn(newColumn));
+    this.addColumnText = '';
     // this._columnService.post(newColumn)
     //   .subscribe(column => {
     //     this.board.columns.push(column)
