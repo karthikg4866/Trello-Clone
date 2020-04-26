@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb+srv://dbUser:dbPassword@cluster0-cryh1.mongodb.net/test1', { useNewUrlParser: true,useUnifiedTopology: true },);
+mongoose.connect('mongodb+srv://dbUser:dbPassword@cluster0-cryh1.mongodb.net/test2', { useNewUrlParser: true,useUnifiedTopology: true },);
 
 app.use(cors());
 app.use(morgan('dev'));

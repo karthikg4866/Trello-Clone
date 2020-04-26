@@ -1,7 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter, ElementRef, ChangeDetectorRef, NgZone} from '@angular/core';
-import {Card} from './card';
-import {CardService} from './card.service';
-import {WebSocketService} from '../ws.service';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Card } from './card';
+import { CardService } from './card.service';
+import { Store } from '@ngrx/store';
+import { UpdateCard, GetCard } from '../board/board.actions';
 
 @Component({
   selector: 'gtm-card',
@@ -16,21 +17,15 @@ export class CardComponent implements OnInit {
   currentTitle: string;
   zone: NgZone;
   constructor(private el: ElementRef,
+    private store: Store,
     private _ref: ChangeDetectorRef,
-    private _ws: WebSocketService,
     private _cardService: CardService) {
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.cardUpdate = new EventEmitter();
   }
 
   ngOnInit() {
-    this._ws.onCardUpdate.subscribe((card: Card) => {
-      if (this.card._id === card._id) {
-        this.card.title = card.title;
-        this.card.order = card.order;
-        this.card.columnId = card.columnId;
-      }
-    });
+    this.currentTitle = this.card.title;
   }
 
   blurOnEnter(event) {
@@ -48,25 +43,19 @@ export class CardComponent implements OnInit {
 
     let textArea = this.el.nativeElement.getElementsByTagName('textarea')[0];
 
-    setTimeout(function() {
+    setTimeout(function () {
       textArea.focus();
     }, 0);
   }
 
   updateCard() {
-    if (!this.card.title || this.card.title.trim() === '') {
-      this.card.title = this.currentTitle;
+    let cardUpdated = {...this.card};
+    if (this.currentTitle && this.card.title || this.card.title.trim() !== '') {
+      cardUpdated.title = this.currentTitle;
     }
-
-    this._cardService.put(this.card).then(res => {
-      this._ws.updateCard(this.card.boardId, this.card);
-    });
+    this.store.dispatch(new UpdateCard(cardUpdated));
+    this.store.dispatch(new GetCard(this.card.boardId));
     this.editingCard = false;
-  }
-
-  //TODO: check lifecycle
-  private ngOnDestroy() {
-    //this._ws.onCardUpdate.unsubscribe();
   }
 
 }

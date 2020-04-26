@@ -4,7 +4,7 @@ import {Column} from '../column/column';
 import {Card} from '../card/card';
 import {map} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ColumnService {
   apiUrl = '/column';
 
@@ -27,9 +27,10 @@ export class ColumnService {
   }
 
   put(column: Column) {
+    console.log("column service");
+    console.log(column)
     return this._http
-      .put(this.apiUrl + '/' + column._id, JSON.stringify(column))
-      .toPromise();
+      .put(this.apiUrl + '/' + column._id, JSON.stringify(column));
   }
 
   post(column: Column) {;

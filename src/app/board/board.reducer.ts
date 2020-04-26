@@ -39,6 +39,9 @@ export function BoardReducer(state = boardState, action: boardActions.boardColum
     case boardActions.CardTypes.ADD_CARD_SUCCESS: {
       return { ...state, success: true };
     }
+    case boardActions.CardTypes.UPDATE_CARD_SUCCESS: {
+      return { ...state, success: true };
+    }
     case boardActions.CardTypes.GET_CARD_SUCCESS: {
       return { ...state, cards: action.payload };
     }
@@ -49,18 +52,3 @@ export function BoardReducer(state = boardState, action: boardActions.boardColum
       { return state; }
   }
 }
-
-function addColumn(column, state) {
-  let columnsList = state.columns;
-  console.log(columnsList);
-  if (columnsList) {
-    columnsList.push(column);
-  }
-  console.log(columnsList);
-  return columnsList;
-}
-// export const getBoardState = createFeatureSelector<BoardState>("boardState");
-
-// export const getAllBoards = createSelector(getBoardState, (state: BoardState) => {
-//  console.log(state);
-// });

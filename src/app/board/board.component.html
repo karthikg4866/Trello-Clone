@@ -14,7 +14,7 @@
   <!-- TODO to MANI: getting issue with order pipe..plese check -->
   <div *ngFor="let column of board.columns" class="row sortable-column">
     <div class="col-md-6" style="margin-bottom: 10px;">
-      <gtm-column [column]="column" (onAddCard)="addCard($event)" [cards]="board.cards">
+      <gtm-column [column]="column" [cards]="board.cards">
       </gtm-column>
     </div>
   </div>

@@ -11,10 +11,13 @@ import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AddBoardSuccess, BoardTypes, GetBoardSuccess, GetBoard } from '../dashboard/dashboard.actions';
 import { BoardService } from './board.service';
 import { BoardIdTypes, GetBoardIdSuccess, ColumnTypes, CardTypes, GetCardSucess, GetColumnsSuccess } from './board.actions';
+import { CardService } from '../card/card.service';
 @Injectable()
 export class BoardEffects {
 
-    constructor(private actions$: Actions, private store: Store, private boardService: BoardService) {
+    constructor(private actions$: Actions, private store: Store, 
+        private cardService: CardService,
+        private boardService: BoardService) {
     }
 
     // Listen for the 'ADD BOARD' action
@@ -88,7 +91,7 @@ export class BoardEffects {
     getCard$: Observable<Action> = this.actions$.pipe(
         ofType(CardTypes.GET_CARD),
         mergeMap((action: any) =>
-            this.boardService.getAll().pipe(
+            this.boardService.getCards(action.payload).pipe(
                 // If successful, dispatch success action with result
                 map((resp: any) => {
                     return (new GetCardSucess(resp))

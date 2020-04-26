@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { AddBoardSuccess, BoardTypes, GetBoardSuccess, GetBoard } from '../dashboard/dashboard.actions';
 import { ColumnService } from './column.service';
-import { BoardIdTypes, GetBoardIdSuccess, ColumnTypes, CardTypes, GetCardSucess, AddColumnSuccess, GetColumns } from './../board/board.actions';
+import { BoardIdTypes, GetBoardIdSuccess, ColumnTypes, CardTypes, GetCardSucess, AddColumnSuccess, GetColumns, GetColumnsSuccess, UpdateColumnSuccess } from './../board/board.actions';
 @Injectable()
 export class ColumnEffects {
 
@@ -35,19 +35,40 @@ export class ColumnEffects {
         )
     );
 
-    // @Effect()
-    // getCard$: Observable<Action> = this.actions$.pipe(
-    //     ofType(CardTypes.GET_CARD),
-    //     mergeMap((action: any) =>
-    //         this.boardService.getAll().pipe(
-    //             // If successful, dispatch success action with result
-    //             map((resp: any) => {
-    //                 return (new GetCardSucess(resp))
-    //             })
-    //             // If request fails, dispatch failed action
-    //             // catchError(() => of({ type: 'FAILED' }))
-    //         )
-    //     )
-    // );
+    @Effect()
+    updateCoumns$: Observable<Action> = this.actions$.pipe(
+        ofType(ColumnTypes.UPDATE_COLUMNS),
+        mergeMap((action: any) =>
+            this.columnService.put(action.payload).pipe(
+                // If successful, dispatch success action with result
+                map((resp: any) => {
+                    console.log(resp);
+                    console.log("column service...............")
+                    // this.store.dispatch(new GetColumns(resp.boardId));
+                    return (new UpdateColumnSuccess(resp))
+                })
+                // If request fails, dispatch failed action
+                // catchError(() => of({ type: 'FAILED' }))
+            )
+        )
+    );
+
+
+    @Effect()
+    getCoumns$: Observable<Action> = this.actions$.pipe(
+        ofType(ColumnTypes.GET_COLUMNS),
+        mergeMap((action: any) =>
+            this.columnService.get(action.payload).pipe(
+                // If successful, dispatch success action with result
+                map((resp: any) => {
+                    console.log("get columns after column add");
+                    console.log(resp);
+                    return (new GetColumnsSuccess(resp))
+                })
+                // If request fails, dispatch failed action
+                // catchError(() => of({ type: 'FAILED' }))
+            )
+        )
+    );
 
 }

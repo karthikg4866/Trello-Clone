@@ -4,12 +4,11 @@ import { Column } from '../column/column';
 import { Card } from '../card/card';
 import { BoardService } from './board.service';
 import { ColumnService } from '../column/column.service';
-import { WebSocketService } from '../ws.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { GetBoardbyId, GetCard, GetColumns, AddColumn } from './board.actions';
+import { GetBoardbyId, GetCard, GetColumns, AddColumn, UpdateColumn } from './board.actions';
 import { boardState, BoardState } from './board.reducer';
 
 declare var jQuery: any;
@@ -22,7 +21,7 @@ var curYPos = 0,
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit, OnDestroy {
+export class BoardComponent implements OnInit {
   board: Board;
   addingColumn = false;
   addColumnText: string;
@@ -33,7 +32,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   count$: Observable<number>;
 
   constructor(public el: ElementRef,
-    private _ws: WebSocketService,
     private _boardService: BoardService,
     private _columnService: ColumnService,
     private _router: Router,
@@ -43,41 +41,18 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // get columns from store
-    this._ws.connect();
-    this._ws.onColumnAdd.subscribe(column => {
-      this.board.columns.push(column);
-      this.updateBoardWidth();
-    });
-
-    // get card from store
-    this._ws.onCardAdd.subscribe(card => {
-      this.board.cards.push(card);
-    });
-    this.currentTitle = (this.board && this.board.title) ? this.board.title: '';
+    this.currentTitle = (this.board && this.board.title) ? this.board.title : '';
     let boardId = this._route.snapshot.params['id'];
     this.store.dispatch(new GetBoardbyId(boardId));
     this.store.dispatch(new GetColumns(boardId));
     this.store.dispatch(new GetCard(boardId));
     this.store.select("board").subscribe((boardStateData: BoardState) => {
-      this.board = {...boardStateData};
+      this.board = { ...boardStateData };
+      console.log(this.board)
       this.currentTitle = this.board.title;
       document.title = this.board.title + " | Generic Task Manager";
       this.setupView();
     });
-    // this._boardService.getBoardWithColumnsAndCards(boardId)
-    //   .subscribe(data => {
-    //     this.board = data[0];
-    //     this.board.columns = data[1];
-    //     this.board.cards = data[2];
-    //     document.title = this.board.title + " | Generic Task Manager";
-    //     this.setupView();
-    //   });
-  }
-
-  ngOnDestroy() {
-    // console.log(`leaving board ${this.board._id}`);
-    this._ws.leave(this.board._id);
   }
 
   setupView() {
@@ -103,55 +78,9 @@ export class BoardComponent implements OnInit, OnDestroy {
           });
         }
       }).disableSelection();
-
-      //component.bindPane();;
-
-      window.addEventListener('resize', function (e) {
-        component.updateBoardWidth();
-      });
-      component.updateBoardWidth();
-      document.getElementById('content-wrapper').style.backgroundColor = '';
-    }, 100);
+    });
   }
 
-  // bindPane() {
-  //   let el = document.getElementById('content-wrapper');
-  //   el.addEventListener('mousemove', function (e) {
-  //     e.preventDefault();
-  //     if (curDown === true) {
-  //       el.scrollLeft += (curXPos - e.pageX) * .25;// x > 0 ? x : 0;
-  //       el.scrollTop += (curYPos - e.pageY) * .25;// y > 0 ? y : 0;
-  //     }
-  //   });
-
-  //   el.addEventListener('mousedown', function (e) {
-  //     if (e.srcElement["id"] === 'main' || e.srcElement["id"] === 'content-wrapper') {
-  //       curDown = true;
-  //     }
-  //     curYPos = e.pageY; curXPos = e.pageX;
-  //   });
-  //   el.addEventListener('mouseup', function (e) {
-  //     curDown = false;
-  //   });
-  // }
-
-  updateBoardWidth() {
-    // this.boardWidth = ((this.board.columns.length + (this.columnsAdded > 0 ? 1 : 2)) * 280) + 10;
-    this.boardWidth = ((this.board.columns.length + 1) * 280) + 10;
-
-    if (this.boardWidth > document.body.scrollWidth) {
-      document.getElementById('main').style.width = this.boardWidth + 'px';
-    } else {
-      document.getElementById('main').style.width = '100%';
-    }
-
-    if (this.columnsAdded > 0) {
-      let wrapper = document.getElementById('content-wrapper');
-      wrapper.scrollLeft = wrapper.scrollWidth;
-    }
-
-    this.columnsAdded++;
-  }
 
   updateBoard() {
     console.log("update board..........");
@@ -176,18 +105,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
     setTimeout(function () { input.focus(); }, 0);
   }
-
-  // updateColumnElements(column: Column) {
-  //   let columnArr = jQuery('#main .column');
-  //   let columnEl = jQuery('#main .column[columnid=' + column._id + ']');
-  //   let i = 0;
-  //   for (; i < columnArr.length - 1; i++) {
-  //     column.order < +columnArr[i].getAttibute('column-order');
-  //     break;
-  //   }
-
-  //   columnEl.remove().insertBefore(columnArr[i]);
-  // }
 
   updateColumnOrder(event) {
     let i: number = 0,
@@ -218,11 +135,9 @@ export class BoardComponent implements OnInit, OnDestroy {
       newOrder = elAfter / 2;
     }
 
-    let column = this.board.columns.filter(x => x._id === event.columnId)[0];
+    let column = JSON.parse(JSON.stringify(this.board)).columns.filter(x => x._id === event.columnId)[0];
     column.order = newOrder;
-    this._columnService.put(column).then(res => {
-      this._ws.updateColumn(this.board._id, column);
-    });
+    this.store.dispatch(new UpdateColumn(column));
   }
 
 
@@ -241,7 +156,7 @@ export class BoardComponent implements OnInit, OnDestroy {
   }
 
   addColumn() {
-console.log("column addede")
+    console.log("column addede")
     let newColumn = <Column>{
       title: this.addColumnText,
       order: (this.board.columns.length + 1) * 1000,
@@ -249,14 +164,6 @@ console.log("column addede")
     };
     this.store.dispatch(new AddColumn(newColumn));
     this.addColumnText = '';
-    // this._columnService.post(newColumn)
-    //   .subscribe(column => {
-    //     this.board.columns.push(column)
-    //     console.log('column added');
-    //     this.updateBoardWidth();
-    //     this.addColumnText = '';
-    //     this._ws.addColumn(this.board._id, column);
-    //   });
   }
 
   addColumnOnEnter(event: KeyboardEvent) {
@@ -282,11 +189,6 @@ console.log("column addede")
   clearAddColumn() {
     this.addingColumn = false;
     this.addColumnText = '';
-  }
-
-
-  addCard(card: Card) {
-    this.board.cards.push(card);
   }
 
   // foreceUpdateCards() {

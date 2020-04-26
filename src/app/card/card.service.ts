@@ -21,8 +21,7 @@ export class CardService {
   }
 
   put(card: Card) {
-    return this._http.put(this.apiUrl + '/' + card._id, JSON.stringify(card))
-      .toPromise();
+    return this._http.put(this.apiUrl + '/' + card._id, JSON.stringify(card));
   }
 
   post(card: Card) {
