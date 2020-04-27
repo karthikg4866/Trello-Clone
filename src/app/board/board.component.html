@@ -9,11 +9,10 @@
   <input [style.display]="addingColumn ? '' : 'none' " (keyup)="addColumnOnEnter($event)" (blur)="addColumnOnBlur()"
     [(ngModel)]="addColumnText" />
 </div>
-
+<div class="rowSpace">&nbsp;</div>
 <section *ngIf="board" id="main">
-  <!-- TODO to MANI: getting issue with order pipe..plese check -->
   <div *ngFor="let column of board.columns" class="row sortable-column">
-    <div class="col-md-6" style="margin-bottom: 10px;">
+    <div class="col-6">
       <app-column [column]="column" [cards]="board.cards">
       </app-column>
     </div>

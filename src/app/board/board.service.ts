@@ -50,9 +50,7 @@ export class BoardService {
   }
 
   delete(board: Board) {
-    this.http.delete(this.apiUrl + '/' + board._id)
-      .toPromise()
-      .then(res => console.log(res));
+    return this.http.delete(this.apiUrl + '/' + board._id).pipe(map((res: any) => res));
   }
 
 }

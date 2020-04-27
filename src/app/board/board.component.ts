@@ -79,15 +79,11 @@ export class BoardComponent implements OnInit {
       this.board.title = this.currentTitle;
       this._boardService.put(this.board);
     }
-    // else {
-    //   this.board.title = this.currentTitle;
-    // }
     this.editingTilte = false;
     document.title = this.board.title + ' | Generic Task Manager';
   }
 
   editTitle() {
-    //  this.currentTitle = this.board.title;
     this.editingTilte = true;
 
     let input = this.el.nativeElement

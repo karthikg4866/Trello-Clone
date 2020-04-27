@@ -25,8 +25,8 @@ describe('Web Test Scenarios', function() {
     })
     it('Add Column in board',() => {
       cy.visit(webURL+'/b/'+ board1['_id']);
-      cy.get('.edit-column-hr').click().then(()=>{
-        cy.get('.edit-column').type('New Column WebApp cypress').blur();
+      cy.get('#edit-column-hr').click().then(()=>{
+        cy.get('#edit-column').type('New Column WebApp cypress').blur();
       })
     })
     it('Add card in board',() => {
@@ -34,10 +34,4 @@ describe('Web Test Scenarios', function() {
          cy.get('.add-card-input').type('New card WebApp cypress').blur();
        })
      })
-
-    it('Edit card in board',() => {
-      cy.get('.edit-card-li').click().then(()=>{
-        cy.get('.edit-card-ta').type('Edit card WebApp cypress').blur();
-      })
-    })
 });

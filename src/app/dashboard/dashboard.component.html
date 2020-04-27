@@ -6,6 +6,9 @@
     </a>
     <a class="board" *ngFor="let board of listOfBoards" [routerLink]="['/b', board._id]">
       <span class="title">{{board?.title}}</span>
+      <button type="button" class="close" aria-label="Close"  (click)="deleteBoard(board)">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </a>
   </div>
 </div>

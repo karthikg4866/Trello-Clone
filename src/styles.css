@@ -70,3 +70,14 @@ li.card-placeholder {
 #main > div {
   float: left;
 }
+.rowSpace{
+  height: 10px;
+}
+.closeImg{
+ background-image: url(/assets/images/close.png);
+ width: 20px;
+}
+.close{
+  margin-top: -14px;
+    margin-right: -5px;
+}

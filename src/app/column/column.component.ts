@@ -39,24 +39,24 @@ export class ColumnComponent implements OnInit {
 
   setupView() {
     const component = this;
-    var startColumn;
+    let startColumn;
     jQuery('.card-list').sortable({
       connectWith: '.card-list',
       placeholder: 'card-placeholder',
       dropOnEmpty: true,
       tolerance: 'pointer',
-      start: function (event, ui) {
+      start(event, ui) {
         ui.placeholder.height(ui.item.outerHeight());
         startColumn = ui.item.parent();
       },
-      stop: function (event, ui) {
-        var senderColumnId = startColumn.attr('column-id');
-        var targetColumnId = ui.item.closest('.card-list').attr('column-id');
-        var cardId = ui.item.find('.card').attr('card-id');
+      stop(event, ui) {
+        const senderColumnId = startColumn.attr('column-id');
+        const targetColumnId = ui.item.closest('.card-list').attr('column-id');
+        const cardId = ui.item.find('.card').attr('card-id');
 
         component.updateCardsOrder({
           columnId: targetColumnId || senderColumnId,
-          cardId: cardId
+          cardId
         });
       }
     });
@@ -64,14 +64,14 @@ export class ColumnComponent implements OnInit {
   }
 
   updateCardsOrder(event) {
-    let cardArr = jQuery('[column-id=' + event.columnId + '] .card');
-    let i: number = 0;
-    let elBefore: number = -1;
-    let elAfter: number = -1;
-    let newOrder: number = 0;
+    const cardArr = jQuery('[column-id=' + event.columnId + '] .card');
+    let i = 0;
+    let elBefore = -1;
+    let elAfter = -1;
+    let newOrder = 0;
 
     for (i = 0; i < cardArr.length - 1; i++) {
-      if (cardArr[i].getAttribute('card-id') == event.cardId) {
+      if (cardArr[i].getAttribute('card-id') === event.cardId) {
         break;
       }
     }
@@ -82,11 +82,10 @@ export class ColumnComponent implements OnInit {
         elAfter = +cardArr[i + 1].getAttribute('card-order');
 
         newOrder = elBefore + ((elAfter - elBefore) / 2);
-      }
-      else if (i == cardArr.length - 1) {
+      } else if (i === cardArr.length - 1) {
         elBefore = +cardArr[i - 1].getAttribute('card-order');
         newOrder = elBefore + 1000;
-      } else if (i == 0) {
+      } else if (i === 0) {
         elAfter = +cardArr[i + 1].getAttribute('card-order');
 
         newOrder = elAfter / 2;
@@ -112,18 +111,18 @@ export class ColumnComponent implements OnInit {
     if (event.keyCode === 13) {
       this.updateColumn();
     } else if (event.keyCode === 27) {
-      this.cleadAddColumn();
+      this.clearAddColumn();
     }
   }
 
   addCard() {
     this.cards = this.cards || [];
-    const newCard = <Card>{
-      title: this.addCardText,
-      order: (this.cards.length + 1) * 1000,
-      columnId: this.column._id,
-      boardId: this.column.boardId
-    };
+    const newCard = {
+              title: this.addCardText,
+              order: (this.cards.length + 1) * 1000,
+              columnId: this.column._id,
+              boardId: this.column.boardId
+    } as Card;
     this.store.dispatch(new AddCard(newCard));
   }
 
@@ -148,11 +147,11 @@ export class ColumnComponent implements OnInit {
       this.store.dispatch(new GetColumns(columnUpdated.boardId));
       this.editingColumn = false;
     } else {
-      this.cleadAddColumn();
+      this.clearAddColumn();
     }
   }
 
-  cleadAddColumn() {
+  clearAddColumn() {
     this.editingColumn = false;
   }
 
@@ -163,16 +162,16 @@ export class ColumnComponent implements OnInit {
       .getElementsByClassName('column-header')[0]
       .getElementsByTagName('input')[0];
 
-    setTimeout(function () { input.focus(); }, 0);
+    setTimeout(() => { input.focus(); }, 0);
   }
 
   enableAddCard() {
     this.addingCard = true;
     const input = this.el.nativeElement
-      .getElementsByClassName('add-card')[0]
+      .getElementsByClassName('add-card-div')[0]
       .getElementsByTagName('input')[0];
 
-    setTimeout(function () { input.focus(); }, 0);
+    setTimeout(() => { input.focus(); }, 0);
   }
 
 

@@ -72,4 +72,5 @@ ul.card-list {
 }
 ul.card-list > li {
   list-style: none;
+  width: 100%;
 }
