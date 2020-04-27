@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AddBoard, GetBoard } from './dashboard.actions';
+import { AddBoard, GetBoard, RemoveBoard } from './dashboard.actions';
 import { Observable } from 'rxjs';
 import { AppState } from '../reducers';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +12,7 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   boards$: Observable<any>;
   listOfBoards: any[] = [];
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -28,7 +27,10 @@ export class DashboardComponent implements OnInit {
 
   public addBoard() {
     this.store.dispatch(new AddBoard({ title: 'New board' }));
-    // this.router.navigate(['/b', ._id]);
   }
-
+  public deleteBoard(board) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.store.dispatch(new RemoveBoard(board));
+  }
 }

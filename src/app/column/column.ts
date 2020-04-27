@@ -5,5 +5,4 @@ export class Column {
     title: string;
     boardId: string;
     order: number;
-    //cards: Card[];
 }

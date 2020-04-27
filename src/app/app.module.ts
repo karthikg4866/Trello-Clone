@@ -21,6 +21,8 @@ import { CardComponent } from './card/card.component';
 // PIPES
 import { OrderBy } from './pipes/orderby.pipe';
 import { Where } from './pipes/where.pipe';
+
+// NGRX
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducers';
 import { BoardEffects } from './board/board.effects';

@@ -16,13 +16,10 @@ export class ColumnEffects {
         ofType(ColumnTypes.ADD_COLUMNS),
         mergeMap((action: any) =>
             this.columnService.post(action.payload).pipe(
-                // If successful, dispatch success action with result
                 map((resp: any) => {
                     this.store.dispatch(new GetColumns(resp.boardId));
                     return (new AddColumnSuccess(resp));
                 })
-                // If request fails, dispatch failed action
-                // catchError(() => of({ type: 'FAILED' }))
             )
         )
     );
@@ -32,13 +29,10 @@ export class ColumnEffects {
         ofType(ColumnTypes.UPDATE_COLUMNS),
         mergeMap((action: any) =>
             this.columnService.put(action.payload).pipe(
-                // If successful, dispatch success action with result
                 map((resp: any) => {
                     // this.store.dispatch(new GetColumns(resp.boardId));
                     return (new UpdateColumnSuccess(resp));
                 })
-                // If request fails, dispatch failed action
-                // catchError(() => of({ type: 'FAILED' }))
             )
         )
     );
@@ -49,12 +43,9 @@ export class ColumnEffects {
         ofType(ColumnTypes.GET_COLUMNS),
         mergeMap((action: any) =>
             this.columnService.get(action.payload).pipe(
-                // If successful, dispatch success action with result
                 map((resp: any) => {
                     return (new GetColumnsSuccess(resp));
                 })
-                // If request fails, dispatch failed action
-                // catchError(() => of({ type: 'FAILED' }))
             )
         )
     );

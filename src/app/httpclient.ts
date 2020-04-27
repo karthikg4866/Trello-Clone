@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ROOT_URL } from './constants'
+import { ROOT_URL } from './constants';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
@@ -10,34 +10,34 @@ const httpOptions = {
 @Injectable()
 export class HttpClientService {
 
-  rootUrl: String = ROOT_URL;
+  rootUrl = ROOT_URL;
 
-  constructor(private _http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   public get(url: string, headers?: any) {
     url = this.handleUrl(url);
-    return this._http.get(url, headers || httpOptions);
+    return this.http.get(url, headers || httpOptions);
   }
 
   public post(url: string, body: string, headers?: any) {
     url = this.handleUrl(url);
-    return this._http.post(url, body, headers || httpOptions);
+    return this.http.post(url, body, headers || httpOptions);
   }
 
   public put(url: string, body: string, headers?: any) {
     url = this.handleUrl(url);
-    return this._http.put(url, body, headers || httpOptions);
+    return this.http.put(url, body, headers || httpOptions);
   }
 
   public delete(url: string, headers?: any) {
     url = this.handleUrl(url);
-    return this._http.delete(url, headers || httpOptions);
+    return this.http.delete(url, headers || httpOptions);
   }
 
   private handleUrl(url: string): string {
     if (!this.checkUrlExternal(url)) {
-      if (url.charAt(0) == '/') url = url.substring(1);
+      if (url.charAt(0) === '/') { url = url.substring(1); }
       url = this.rootUrl + url;
     }
     return url;

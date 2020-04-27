@@ -16,13 +16,10 @@ export class CardEffects {
         ofType(CardTypes.ADD_CARD),
         mergeMap((action: any) =>
             this.cardService.post(action.payload).pipe(
-                // If successful, dispatch success action with result
                 map((resp: any) => {
                     this.store.dispatch(new GetCard(resp.boardId));
                     return (new AddCardSuccess(resp));
                 })
-                // If request fails, dispatch failed action
-                // catchError(() => of({ type: 'FAILED' }))
             )
         )
     );
@@ -32,13 +29,10 @@ export class CardEffects {
         ofType(CardTypes.UPDATE_CARD),
         mergeMap((action: any) =>
             this.cardService.put(action.payload).pipe(
-                // If successful, dispatch success action with result
                 map((resp: any) => {
                    // this.store.dispatch(new GetCard(resp.boardId));
                     return (new UpdateCardSuccess(resp));
                 })
-                // If request fails, dispatch failed action
-                // catchError(() => of({ type: 'FAILED' }))
             )
         )
     );
