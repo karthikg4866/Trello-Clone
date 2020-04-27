@@ -11,8 +11,7 @@
 </div>
 
 <section *ngIf="board" id="main">
-  <!-- TODO to MANI: getting issue with order pipe..plese check -->
-  <div *ngFor="let column of board.columns" class="row sortable-column">
+    <div *ngFor="let column of board.columns" class="row sortable-column">
     <div class="col-md-6" style="margin-bottom: 10px;">
       <app-column [column]="column" [cards]="board.cards">
       </app-column>

@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb+srv://dbUser:dbPassword@cluster0-0fehw.gcp.mongodb.net/TrelloDB', { useNewUrlParser: true,useUnifiedTopology: true },);
+mongoose.connect('mongodb+srv://tUser:tPassword@cluster0-3m1qe.mongodb.net/test', { useNewUrlParser: true,useUnifiedTopology: true },);
 
 app.use(cors());
 app.use(morgan('dev'));
