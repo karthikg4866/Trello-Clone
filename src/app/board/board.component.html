@@ -11,13 +11,8 @@
 </div>
 <div class="rowSpace">&nbsp;</div>
 <section *ngIf="board" id="main">
-<<<<<<< HEAD
     <div *ngFor="let column of board.columns" class="row sortable-column">
     <div class="col-md-6" style="margin-bottom: 10px;">
-=======
-  <div *ngFor="let column of board.columns" class="row sortable-column">
-    <div class="col-6">
->>>>>>> 72352ff55e237d4e280546586599d328a2c32ff5
       <app-column [column]="column" [cards]="board.cards">
       </app-column>
     </div>
